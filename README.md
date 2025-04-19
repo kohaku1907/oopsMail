@@ -6,9 +6,10 @@ OopsMail is a temporary email service built with Go. It allows users to create t
 
 - 📨 Create temporary email addresses
 - 📥 Receive emails at temporary addresses
-- 🔍 View received emails via REST API
+- 🔍 View received emails via web interface or REST API
 - 🧹 Automatic cleanup of expired mailboxes
 - 🗄️ Redis-based storage for scalability
+- 🌐 Modern web interface
 
 ## 📋 Prerequisites
 
@@ -43,13 +44,32 @@ go run cmd/main.go
 
 The service will start:
 - 📧 SMTP server on port 1025
-- 🌐 HTTP API server on port 8080
+- 🌐 Web interface on port 8080
+
+## 🌐 Web Interface
+
+Visit http://localhost:8080 in your browser to access the web interface.
+
+### Home Page
+- Overview of the service features
+- Quick access to create new mailboxes
+- Information about automatic cleanup
+
+### Create Mailbox
+- Generate a new temporary email address
+- Copy email address to clipboard
+- View expiration time
+
+### View Emails
+- Enter mailbox ID or full email address
+- View all received emails
+- See email details including subject, sender, and content
 
 ## 🔌 API Endpoints
 
 ### 📝 Create Mailbox
 ```
-POST /mailbox
+POST /api/mailbox
 ```
 Response:
 ```json
@@ -62,7 +82,7 @@ Response:
 
 ### 📬 Get Emails
 ```
-GET /mailbox/:id
+GET /api/mailbox/:id
 ```
 Response:
 ```json
@@ -81,16 +101,16 @@ Response:
 ## 📖 Usage Example
 
 1. Create a temporary mailbox:
-```bash
-curl -X POST http://localhost:8080/mailbox
-```
+   - Visit http://localhost:8080/create
+   - Click "Generate Temporary Email"
+   - Copy the generated email address
 
-2. Send an email to the generated address (e.g., random_id@oopsmail.com)
+2. Send an email to the generated address
 
-3. Retrieve emails:
-```bash
-curl http://localhost:8080/mailbox/random_id
-```
+3. View your emails:
+   - Visit http://localhost:8080/view
+   - Enter your mailbox ID or full email address
+   - View all received emails
 
 ## 🛠️ Development
 
@@ -101,6 +121,9 @@ The project is structured as follows:
   - `mailbox/` - Mailbox service
   - `smtp/` - SMTP server
   - `storage/` - Storage interface and implementations
+  - `web/` - Web interface
+    - `templates/` - HTML templates
+    - `static/` - CSS and JavaScript files
 
 ## 📄 License
 

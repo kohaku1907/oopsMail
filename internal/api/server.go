@@ -22,8 +22,8 @@ func NewServer(mailboxService *mailbox.Service) *Server {
 	}
 
 	// Register routes
-	router.POST("/mailbox", server.createMailbox)
-	router.GET("/mailbox/:id", server.getEmails)
+	router.POST("/mailbox", server.CreateMailbox)
+	router.GET("/mailbox/:id", server.GetEmails)
 
 	return server
 }
@@ -43,7 +43,7 @@ type createMailboxResponse struct {
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
-func (s *Server) createMailbox(c *gin.Context) {
+func (s *Server) CreateMailbox(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	id, err := s.mailboxService.CreateMailbox(ctx)
@@ -61,7 +61,7 @@ func (s *Server) createMailbox(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (s *Server) getEmails(c *gin.Context) {
+func (s *Server) GetEmails(c *gin.Context) {
 	ctx := c.Request.Context()
 	mailboxID := c.Param("id")
 

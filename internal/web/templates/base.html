@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OopsMail - {{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">OopsMail</div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/create">Create Mailbox</a></li>
+                <li><a href="/view">View Emails</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {{template "content" .}}
+    </main>
+    <footer>
+        <p>&copy; 2024 OopsMail - Temporary Email Service</p>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,54 @@
+{{define "content"}}
+<div class="container">
+    <h1>Create New Mailbox</h1>
+    
+    <div class="create-form">
+        <button id="createMailbox" class="button">Generate Temporary Email</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h2>Your Temporary Email</h2>
+            <div class="email-info">
+                <p><strong>Email Address:</strong> <span id="emailAddress"></span></p>
+                <p><strong>Expires in:</strong> <span id="expiresIn"></span></p>
+            </div>
+            <div class="actions">
+                <button id="copyEmail" class="button secondary">Copy Email</button>
+                <a href="/" class="button">Go to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('createMailbox').addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/mailbox', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to create mailbox');
+        }
+        
+        const data = await response.json();
+        
+        // Show result
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('emailAddress').textContent = data.email;
+        document.getElementById('expiresIn').textContent = '1 hour';
+        
+        // Copy email to clipboard
+        document.getElementById('copyEmail').addEventListener('click', () => {
+            navigator.clipboard.writeText(data.email);
+            alert('Email address copied to clipboard!');
+        });
+        
+    } catch (error) {
+        alert('Error creating mailbox: ' + error.message);
+    }
+});
+</script>
+{{end}} 

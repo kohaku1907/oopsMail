@@ -1,0 +1,74 @@
+{{define "content"}}
+<div class="container">
+    <h1>View Your Emails</h1>
+    
+    <div class="view-form">
+        <div class="input-group">
+            <input type="text" id="mailboxId" placeholder="Enter your mailbox ID or email address">
+            <button id="viewEmails" class="button">View Emails</button>
+        </div>
+        
+        <div id="emailsList" class="emails-list" style="display: none;">
+            <h2>Your Emails</h2>
+            <div id="emailsContainer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('viewEmails').addEventListener('click', async () => {
+    let input = document.getElementById('mailboxId').value.trim();
+    if (!input) {
+        alert('Please enter a mailbox ID or email address');
+        return;
+    }
+
+    // Extract mailbox ID from email address if full email is provided
+    let mailboxId = input;
+    if (input.includes('@')) {
+        mailboxId = input.split('@')[0];
+    }
+
+    try {
+        const response = await fetch(`/api/mailbox/${mailboxId}`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch emails');
+        }
+        
+        const emails = await response.json();
+        
+        // Show emails list
+        document.getElementById('emailsList').style.display = 'block';
+        const container = document.getElementById('emailsContainer');
+        container.innerHTML = '';
+        
+        if (emails.length === 0) {
+            container.innerHTML = '<p class="no-emails">No emails found for this mailbox.</p>';
+            return;
+        }
+        
+        emails.forEach(email => {
+            const emailElement = document.createElement('div');
+            emailElement.className = 'email-item';
+            emailElement.innerHTML = `
+                <div class="email-header">
+                    <h3>${email.subject || 'No Subject'}</h3>
+                    <span class="email-date">${new Date(email.created_at).toLocaleString()}</span>
+                </div>
+                <div class="email-sender">
+                    <strong>From:</strong> ${email.from}
+                </div>
+                <div class="email-body">
+                    ${email.body}
+                </div>
+            `;
+            container.appendChild(emailElement);
+        });
+        
+    } catch (error) {
+        alert('Error fetching emails: ' + error.message);
+    }
+});
+</script>
+{{end}} 
